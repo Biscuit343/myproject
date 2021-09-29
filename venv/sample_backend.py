@@ -1,7 +1,10 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
 
 users = { 
    'users_list' :
@@ -37,16 +40,6 @@ users = {
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
-#@app.route('/users')
-#def get_users():
-#   search_username = request.args.get('name') #accessing the value of parameter 'name'
-#   if search_username :
-#      subdict = {'users_list' : []}
-#      for user in users['users_list']:
-#         if user['name'] == search_username:
-#            subdict['users_list'].append(user)
-#      return subdict
-#   return users
 
 @app.route('/users/<id>')
 def get_user(id):
@@ -57,7 +50,22 @@ def get_user(id):
       return ({})
    return users
 
-@app.route('/users', methods=['GET', 'POST'])
+@app.route('/users')
+def get_user_name_job():
+   search_username = request.args.get('name') #accessing the value of parameter 'name'
+   search_job = request.args.get('job')
+   if search_username :
+      # subdict = {'users_list' : []}
+      for user in users['users_list']:
+         if user['name'] == search_username:
+            if user['job'] == search_job:
+                return user
+            # subdict['users_list'].append(user)
+      # return subdict
+      return ({})
+   return users
+
+@app.route('/users', methods=['GET', 'POST', 'DELETE'])
 def get_users():
    if request.method == 'GET':
       search_username = request.args.get('name')
@@ -68,8 +76,19 @@ def get_users():
                subdict['users_list'].append(user)
          return subdict
       return users
+
    elif request.method == 'POST':
       userToAdd = request.get_json()
       users['users_list'].append(userToAdd)
       resp = jsonify(success=True)
+      #resp.status_code = 200 #optionally, you can always set a response code. 
+      # 200 is the default code for a normal response
+
+   elif request.method == 'DELETE':
+      userToDelete = request.get_json()
+      removed = users['user_list'].remove(userToDelete)
+      if removed:
+          resp = jsonify(success=True)
+      else:
+          resp = jsonify(success=False)
       return resp
