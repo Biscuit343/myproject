@@ -53,8 +53,6 @@ def hello_world():
 
 @app.route('/users', methods=['GET', 'POST'])
 def get_users():
- #  print(">> request: " , request)
- #  print(">> request.args: " , request.args)
    if request.method == 'GET':
       search_username = request.args.get('name')
       search_job = request.args.get('job')
@@ -76,8 +74,14 @@ def get_users():
    elif request.method == 'POST':
     #    print(">> request JSON", request.get_json())
       userToAdd = request.get_json()
+      #sizeOfList = len(users['users_list'])
       users['users_list'].append(userToAdd)
-      resp = jsonify(success=True)
+      #What the hell is jsonify doing?
+      #users['users_list']
+      resp = jsonify(success=True), 201
+      #resp = jsonify({})
+      #if (result):
+      #   resp.status_code = 201
       #resp.status_code = 200 #optionally, you can always set a response code.
       # 200 is the default code for a normal response
       return resp
