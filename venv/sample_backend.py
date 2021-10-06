@@ -72,13 +72,13 @@ def get_users():
          return subdict
       return users
    elif request.method == 'POST':
-    #    print(">> request JSON", request.get_json())
+      #userID = request.
       userToAdd = request.get_json()
       #sizeOfList = len(users['users_list'])
       users['users_list'].append(userToAdd)
       #What the hell is jsonify doing?
       #users['users_list']
-      resp = jsonify(success=True), 201
+      resp = jsonify(), 201
       #resp = jsonify({})
       #if (result):
       #   resp.status_code = 201
@@ -94,10 +94,12 @@ def get_user(id):
             if request.method == 'GET':
                return user
             elif request.method == 'DELETE':
+               # if method call is DELETE, attempt to remove the object from the user list dict
                users['users_list'].remove(user)
                resp = jsonify({}), 204
                return resp
-      resp = jsonify({"error": "User not found"}), 404
+         # otherwise, return nothing
+      resp = jsonify({}), 404
       return resp
    return users
 
