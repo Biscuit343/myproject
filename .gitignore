@@ -1,2 +1,4 @@
 /matplotlib
 /venv/Lib
+/venv/Scripts
+/venv/Include
